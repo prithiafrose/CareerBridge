@@ -16,8 +16,18 @@ const connectionUrl =
       }`
     : null);
 
+const useSsl = connectionUrl && process.env.DB_SSL !== "0";
+const dialectOptions = useSsl
+  ? {
+      ssl: {
+        rejectUnauthorized: false,
+        ...(process.env.DB_SSL_CA && { ca: process.env.DB_SSL_CA })
+      }
+    }
+  : undefined;
+
 const sequelize = connectionUrl
-  ? new Sequelize(connectionUrl, { dialect: "mysql", logging: false })
+  ? new Sequelize(connectionUrl, { dialect: "mysql", logging: false, dialectOptions })
   : new Sequelize(
       process.env.DB_NAME || "job_portal_db",
       process.env.DB_USER || "root",
