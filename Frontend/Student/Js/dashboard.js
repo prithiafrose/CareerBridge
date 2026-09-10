@@ -9,7 +9,7 @@ function getAuthHeaders() {
 function setupLogout() {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
-  window.location.href = "../Auth/login.html";
+  window.location.href = "../Auth/Login.html";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const user = JSON.parse(localStorage.getItem('user'));
 
   if (!token || !user || user.role !== 'student') {
-    window.location.href = "../Auth/login.html";
+    window.location.href = "../Auth/Login.html";
     return;
   }
 

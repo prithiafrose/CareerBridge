@@ -29,7 +29,7 @@ function checkAuth() {
   if (!token) {
     console.log("No token found - redirecting to login");
     const returnUrl = encodeURIComponent(window.location.href);
-    window.location.href = `../Auth/login.html?redirect=${returnUrl}`;
+    window.location.href = `../Auth/Login.html?redirect=${returnUrl}`;
     return false;
   }
 
@@ -145,7 +145,7 @@ async function fetchJobs(filters = {}) {
 function setupLogout() {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
-  window.location.href = "../Auth/login.html";
+  window.location.href = "../Auth/Login.html";
 }
 
 function applyFilters() {
