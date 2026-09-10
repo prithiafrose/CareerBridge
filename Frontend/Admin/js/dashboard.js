@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           li.textContent = `${job.title} - ${job.company}`;
           li.style.cursor = "pointer";
           li.addEventListener("click", () => {
-            window.location.href = `jobDetails.html?id=${job.id}`;
+            window.location.href = "jobs.html";
           });
           recentJobs.appendChild(li);
         });
