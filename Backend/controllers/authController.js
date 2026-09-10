@@ -18,7 +18,16 @@ const transporter = nodemailer.createTransport({
 
 // Helper function to validate email
 async function isEmailValid(email) {
-  return emailValidator.validate(email);
+  return emailValidator.validate({
+    email,
+    validateRegex: true,
+    validateMx: true,
+    validateTypo: false,
+    validateDisposable: true,
+    validateSMTP: false,
+    validateRole: false,
+    validateDisconnect: false
+  });
 }
 
 const jwtSecret = process.env.JWT_SECRET;
