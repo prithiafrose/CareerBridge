@@ -1,13 +1,32 @@
 const express = require("express");
 const upload = require("../config/multer");
+const authMiddleware = require("../middleware/authMiddleware");
+const User = require("../models/User");
 
 const router = express.Router();
 
-router.post("/profile-image", upload.single("image"), (req, res) => {
-  res.json({
-    imageUrl: req.file.path,
-    message: "Uploaded successfully!"
-  });
+router.post("/profile-image", authMiddleware, upload.single("image"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    const imageUrl = req.file.path;
+
+    const user = await User.findByPk(req.user.id);
+    if (user) {
+      user.profile_picture = imageUrl;
+      await user.save();
+    }
+
+    res.json({
+      imageUrl,
+      message: "Uploaded successfully!"
+    });
+  } catch (err) {
+    console.error("Profile image upload error:", err);
+    res.status(500).json({ error: "File upload failed" });
+  }
 });
 
 router.post("/resume", (req, res) => {

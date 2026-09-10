@@ -35,6 +35,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         data.list.forEach(notif => {
           const li = document.createElement("li");
           li.textContent = notif.message;
+          li.addEventListener("click", () => {
+            if (notif.actionUrl) window.location.href = notif.actionUrl;
+          });
           notifList.appendChild(li);
         });
       }

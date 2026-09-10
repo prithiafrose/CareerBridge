@@ -7,16 +7,23 @@
 
 <body>
   <div class="sidebar">
-    <h2>Recruiter</h2>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="add-job.html">Add Job</a>
-    <a href="my-jobs.html">My Jobs</a>
-    <a href="applicants.html">Applicants</a>
-    <a href="profile.html">Profile</a>
-    <button class="logout-btn" onclick="logout()">Logout</button>
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="4" r="2.5"/><circle cx="17" cy="14" r="3"/><circle cx="8" cy="17" r="3"/><path d="M4 21h16M4 21a9 9 0 0 1 16 0"/></svg>HireWaY</h2>
+    <a href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></a>
+    <a href="add-job.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg><span>Add Job</span></a>
+    <a href="my-jobs.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h3"/><path d="M9 12h6"/><path d="M9 16h6"/></svg><span>My Jobs</span></a>
+    <a href="applicants.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Applicants</span></a>
+    <a href="profile.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg><span>Profile</span></a>
+    <button class="logout-btn" onclick="logout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span>Logout</span></button>
   </div>
 
   <div class="main">
+    <div class="notif-bar">
+      <div class="notification-wrapper">
+        <button id="notifBtn" class="notif-btn">🔔<span id="notifCount" class="notif-count"></span></button>
+        <div id="notifDropdown" class="notif-dropdown"><ul id="notifList"><li>No notifications</li></ul></div>
+      </div>
+    </div>
+
     <h1>Welcome, Recruiter</h1>
 
     <!-- Registration Success Message -->
@@ -25,6 +32,12 @@
       <p style="margin: 5px 0;"><strong>Email:</strong> <span id="regEmail"></span></p>
       <p style="margin: 5px 0;"><strong>Password:</strong> <span id="regPassword"></span></p>
       <p style="margin: 10px 0 0 0; font-size: 0.8em;">Please save these credentials.</p>
+    </div>
+
+    <div class="hero-banner">
+      <h3>Recruiter Workspace</h3>
+      <p>Post jobs, review applicants, and manage your listings from one place.</p>
+      <span class="hero-badge">Recruiter</span>
     </div>
 
     <div class="dashboard-stats">
@@ -43,6 +56,8 @@
 
 <!-- Example: correct path -->
 <script src="../escapeHTML.js"></script>
+<script src="js/notifications.js"></script>
 <script src="./js/recruiter.js"></script>
+<script src="../chatbot/chatbot.js"></script>
 </body>
 </html>

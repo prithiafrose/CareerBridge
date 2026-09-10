@@ -25,10 +25,10 @@
 </div>
   <!-- Sidebar -->
   <div class="sidebar">
-    <a href="dashboard.html">Dashboard</a>
-    <a href="job-list.html">Jobs</a>
-    <a href="applied-jobs.html">Applied Jobs</a>
-    <a href="profile.html">Profile</a>
+    <a href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></a>
+    <a href="job-list.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><span>Jobs</span></a>
+    <a href="applied-jobs.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span>Applied Jobs</span></a>
+    <a href="profile.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg><span>Profile</span></a>
   </div>
 
   <!-- Main content -->
@@ -36,7 +36,7 @@
     <h1>My Profile</h1>
 
     <div class="profile-photo" style="text-align: center; margin-bottom: 20px;">
-      <img id="profileImage" src="https://via.placeholder.com/100" alt="Profile Photo" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+      <img id="profileImage" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23d9d9d9'/><circle cx='50' cy='40' r='16' fill='%23a0a0a0'/><path d='M22 82c0-16 12-24 28-24s28 8 28 24' fill='%23a0a0a0'/></svg>" alt="Profile Photo" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
       <br>
       <input type="file" id="uploadPhoto" accept="image/*" style="margin-top: 10px;">
     </div>
@@ -66,6 +66,8 @@
 
   </div>
 
+  <script src="Js/notifications.js"></script>
   <script src="Js/profile.js"></script>
+<script src="../chatbot/chatbot.js"></script>
 </body>
 </html>

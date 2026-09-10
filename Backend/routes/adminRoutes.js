@@ -31,6 +31,9 @@ router.put('/jobs/:id/approve', adminAuthMiddleware, adminController.getApproved
 // Delete a job
 router.delete('/jobs/:id', adminAuthMiddleware, adminController.getDeletedJobs);
 
+// Applications overview
+router.get('/applications', adminAuthMiddleware, adminController.getAllApplications);
+
 
 
 

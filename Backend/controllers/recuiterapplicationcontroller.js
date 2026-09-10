@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const Application = require('../models/Application');
 const Job = require('../models/Job');
+const Notification = require('../models/Notification');
 
 const uploadsDir = path.join(process.cwd(), 'uploads');
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
@@ -55,6 +56,30 @@ const apply = async (req, res) => {
     };
 
     const application = await Application.create(applicationData);
+
+    // Notify the student that the application was received
+    const job = await Job.findByPk(jobId);
+    if (job) {
+      await Notification.create({
+        user_id,
+        title: 'Application Submitted',
+        message: `Your application for "${job.title}" at ${job.company} was submitted successfully.`,
+        type: 'application_status',
+        read: false
+      });
+
+      // Notify the job poster (recruiter) about the new application
+      if (job.posted_by) {
+        await Notification.create({
+          user_id: job.posted_by,
+          title: 'New Application',
+          message: `${fullName} applied for "${job.title}".`,
+          type: 'application_status',
+          read: false
+        });
+      }
+    }
+
     res.json({
       applicationId: application.id,
       message: 'Application submitted successfully'

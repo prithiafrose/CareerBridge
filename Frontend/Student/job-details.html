@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Job Details</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="navbar">
+  <div class="logo">Student Panel</div>
+  <div class="navbar-right">
+    <div class="notification-wrapper">
+      <button id="notifBtn" class="notif-btn">
+        🔔
+        <span id="notifCount" class="notif-count">0</span>
+      </button>
+      <div id="notifDropdown" class="notif-dropdown">
+        <ul id="notifList"><li>No notifications</li></ul>
+      </div>
+    </div>
+    <button id="logout" class="logout-btn">Logout</button>
+  </div>
+</div>
+
+<div class="sidebar">
+  <a href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></a>
+  <a href="job-list.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg><span>Jobs</span></a>
+  <a href="applied-jobs.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span>Applied Jobs</span></a>
+  <a href="profile.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg><span>Profile</span></a>
+  <button id="logout-btn" class="logout-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span>Logout</span></button>
+</div>
+
+<div class="main-content">
+  <a href="job-list.html" style="display:inline-block;margin-bottom:15px;color:#4f46e5;">&larr; Back to Jobs</a>
+
+  <div id="job-detail-container"><p>Loading job details...</p></div>
+</div>
+
+<script src="Js/notifications.js"></script>
+<script src="Js/job-details.js"></script>
+<script src="../chatbot/chatbot.js"></script>
+</body>
+</html>

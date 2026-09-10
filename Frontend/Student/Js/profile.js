@@ -1,5 +1,7 @@
-// Base URL for backend API
-const API_BASE = "http://localhost:5001";
+﻿// Base URL for backend API
+const API_BASE = "";
+
+const DEFAULT_AVATAR = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23d9d9d9'/><circle cx='50' cy='40' r='16' fill='%23a0a0a0'/><path d='M22 82c0-16 12-24 28-24s28 8 28 24' fill='%23a0a0a0'/></svg>";
 
 // Get form elements
 const profileForm = document.getElementById("profile-form");
@@ -24,6 +26,11 @@ async function loadProfile() {
     document.getElementById("fullNameInput").value = user.full_name || "";
     document.getElementById("skillsInput").value = user.skills || "";
 
+    const profileImage = document.getElementById("profileImage");
+    if (profileImage) {
+      profileImage.src = user.profile_picture || DEFAULT_AVATAR;
+    }
+
   } catch (err) {
     console.error(err);
     alert(err.message);
@@ -36,6 +43,44 @@ async function loadProfile() {
 }
 
 loadProfile();
+
+// Upload profile picture
+const uploadPhoto = document.getElementById("uploadPhoto");
+if (uploadPhoto) {
+  uploadPhoto.addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("User not logged in");
+      const currentUrl = encodeURIComponent(window.location.href);
+      window.location.href = `../Auth/Login.html?redirect=${currentUrl}`;
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await fetch(`${API_BASE}/api/upload/profile-image`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to upload profile picture");
+
+      const profileImage = document.getElementById("profileImage");
+      if (profileImage) profileImage.src = data.imageUrl;
+      alert("Profile picture updated successfully");
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    }
+  });
+}
 
 // Handle profile update form submission
 profileForm.addEventListener("submit", async (e) => {

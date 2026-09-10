@@ -1,4 +1,4 @@
-const API = "http://localhost:5001/api";
+﻿const API = "/api";
 
 // Get auth token
 function getAuthToken() {
@@ -23,6 +23,11 @@ let allApplicants = [];
 async function loadApplicants() {
   try {
     const response = await fetch(API + "/recruiter/applicants", authFetchOptions());
+    if (response.status === 401) {
+      localStorage.removeItem('token');
+      window.location.href = '../Auth/login.html';
+      return;
+    }
     if (!response.ok) throw new Error('Failed to fetch applicants');
 
     allApplicants = await response.json();
@@ -123,7 +128,7 @@ function displayApplicants(applicants) {
       </td>
       <td>
         ${app.resume_path ?
-          `<a href="http://localhost:5001${app.resume_path}" target="_blank" class="btn btn-small">View Resume</a>` :
+          `<a href="/uploads/${app.resume_path.split(/[\\\\/]/).pop()}" target="_blank" class="btn btn-small">View Resume</a>` :
           'No resume'
         }
       </td>
@@ -151,6 +156,11 @@ async function updateStatus(applicantId, newStatus) {
       body: JSON.stringify({ status: newStatus })
     });
 
+    if (response.status === 401) {
+      localStorage.removeItem('token');
+      window.location.href = '../Auth/login.html';
+      return;
+    }
     if (!response.ok) throw new Error('Failed to update status');
 
     // Reload applicants to reflect changes

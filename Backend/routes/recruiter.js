@@ -118,6 +118,19 @@ router.put("/applications/:id/status", async (req, res) => {
     }
 
     await application.update({ status });
+
+    // Notify the applicant about the status change
+    if (application.user_id && application.Job) {
+      const Notification = require("../models/Notification");
+      await Notification.create({
+        user_id: application.user_id,
+        title: 'Application Status Updated',
+        message: `Your application for "${application.Job.title}" at ${application.Job.company} has been marked as "${status}".`,
+        type: 'application_status',
+        read: false
+      });
+    }
+
     res.json({ success: true, status });
   } catch (err) {
     console.error(err);

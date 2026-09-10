@@ -1,4 +1,4 @@
-const API = "http://localhost:5001/api";
+﻿const API = "/api";
 
 // Get auth token
 function getAuthToken() {
@@ -21,6 +21,10 @@ function authFetchOptions(options = {}) {
 if (document.getElementById("jobList")) {
   fetch(API + "/recruiter/jobs", authFetchOptions())
     .then(r => {
+      if (r.status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = '../Auth/login.html';
+      }
       if (!r.ok) throw new Error('Failed to fetch jobs');
       return r.json();
     })
@@ -35,21 +39,34 @@ if (document.getElementById("jobList")) {
         return;
       }
 
-      jobList.innerHTML = data.map(job => `
-        <div class="card">
-          <h3>${escapeHTML(job.title)}</h3>
-          <p><strong>Company:</strong> ${escapeHTML(job.company)}</p>
-          <p><strong>Location:</strong> ${escapeHTML(job.location) || 'Not specified'}</p>
-          <p><strong>Salary:</strong> ${job.salary ? '$' + escapeHTML(job.salary) : 'Not specified'}</p>
-          <p><strong>Type:</strong> ${escapeHTML(job.type) || 'Not specified'}</p>
-          <p><strong>Description:</strong> ${escapeHTML(job.description) || 'No description'}</p>
-          <div class="job-actions">
+      jobList.innerHTML = data.map(job => {
+        const type = (job.type || '').toLowerCase();
+        const typeClass = ['full-time', 'part-time', 'internship', 'contract'].includes(type) ? type : 'default';
+        const pin = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>';
+        const cash = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg>';
+        return `
+        <div class="job-card">
+          <div class="jc-top">
+            <div class="jc-avatar">${escapeHTML((job.company || 'H')[0].toUpperCase())}</div>
+            <div class="jc-id">
+              <div class="jc-title">${escapeHTML(job.title)}</div>
+              <div class="jc-company">${escapeHTML(job.company)}</div>
+            </div>
+            <span class="jb jb-${typeClass}">${escapeHTML(job.type) || 'Job'}</span>
+          </div>
+          <div class="jc-meta">
+            <span class="jm">${pin}${escapeHTML(job.location) || 'Not specified'}</span>
+            <span class="jm">${cash}${job.salary ? '$' + escapeHTML(job.salary) : 'Not specified'}</span>
+          </div>
+          <p class="jc-desc">${escapeHTML(job.description) || 'No description provided.'}</p>
+          <div class="jc-foot job-actions">
             <button class="btn btn-edit" onclick="editJob(${parseInt(job.id)})">Edit</button>
             <button class="btn btn-delete" onclick="deleteJob(${parseInt(job.id)})">Delete</button>
             <button class="btn btn-view" onclick="viewApplicants(${parseInt(job.id)})">View Applicants</button>
           </div>
         </div>
-      `).join("");
+      `;
+      }).join("");
     })
     .catch(err => {
       console.error('Error loading jobs:', err);
@@ -71,6 +88,10 @@ window.deleteJob = function(jobId) {
       method: 'DELETE'
     })
     .then(r => {
+      if (r.status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = '../Auth/login.html';
+      }
       if (!r.ok) throw new Error('Failed to delete job');
       return r.json();
     })

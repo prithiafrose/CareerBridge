@@ -1,4 +1,4 @@
-const API = "http://localhost:5001/api";
+﻿const API = "/api";
 
 // Get auth token
 function getAuthToken() {
@@ -21,6 +21,10 @@ function authFetchOptions(options = {}) {
 if (document.getElementById("totalJobs")) {
   fetch(API + "/recruiter/jobs/count", authFetchOptions())
     .then(r => {
+      if (r.status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = '../Auth/login.html';
+      }
       if (!r.ok) throw new Error('Failed to fetch stats');
       return r.json();
     })
@@ -35,6 +39,10 @@ if (document.getElementById("totalJobs")) {
   // Also load total applicants
   fetch(API + "/recruiter/applicants", authFetchOptions())
     .then(r => {
+      if (r.status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = '../Auth/login.html';
+      }
       if (!r.ok) throw new Error('Failed to fetch applicants');
       return r.json();
     })
@@ -80,6 +88,10 @@ if (document.getElementById("applicantsTable")) {
 if (document.getElementById("jobList")) {
   fetch(API + "/recruiter/jobs", authFetchOptions())
     .then(r => {
+      if (r.status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = '../Auth/login.html';
+      }
       if (!r.ok) throw new Error('Failed to fetch jobs');
       return r.json();
     })
@@ -123,6 +135,10 @@ window.deleteJob = function(jobId) {
       method: 'DELETE'
     })
     .then(r => {
+      if (r.status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = '../Auth/login.html';
+      }
       if (!r.ok) throw new Error('Failed to delete job');
       return r.json();
     })
@@ -188,6 +204,12 @@ function checkAuth() {
         alert('Access denied. Recruiter role required.');
         localStorage.removeItem('token');
         window.location.href = '../Auth/login.html';
+      }
+
+      const welcome = document.querySelector('.main h1');
+      if (welcome) {
+        const name = data.user?.username || 'Recruiter';
+        welcome.innerHTML = `Hi, <span class="hi-name">${escapeHTML(String(name))}</span>!`;
       }
     })
     .catch(err => {

@@ -1,4 +1,4 @@
-const API = "http://localhost:5001/api";
+﻿const API = "/api";
 
 // Get auth token
 function getAuthToken() {
@@ -99,6 +99,12 @@ document.getElementById("jobForm").addEventListener("submit", async (e) => {
       method: "POST",
       body: JSON.stringify(job)
     });
+
+    if (res.status === 401) {
+      localStorage.removeItem('token');
+      window.location.href = '../Auth/login.html';
+      return;
+    }
 
     const data = await res.json();
 

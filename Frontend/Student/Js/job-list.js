@@ -1,5 +1,5 @@
-// ==================== Backend Base URL ====================
-const API_BASE = "http://localhost:5001/api";
+﻿// ==================== Backend Base URL ====================
+const API_BASE = "/api";
 
 // ==================== Utility ====================
 function getAuthHeaders() {
@@ -49,7 +49,7 @@ async function fetchJobs(filters = {}) {
   const jobListDiv = document.getElementById("job-list");
   if (!jobListDiv) return;
   
-  jobListDiv.innerHTML = "<p>Loading jobs...</p>";
+  jobListDiv.innerHTML = '<p class="empty-state">Loading jobs&hellip;</p>';
 
   try {
     const res = await fetch(`${API_BASE}/jobs`);
@@ -93,27 +93,48 @@ async function fetchJobs(filters = {}) {
     }
 
     if (jobs.length === 0) {
-      jobListDiv.innerHTML = "<p>No jobs found matching your criteria.</p>";
+      jobListDiv.innerHTML = '<p class="empty-state">No jobs found matching your criteria.</p>';
       return;
     }
 
-    jobListDiv.innerHTML = jobs.map(job => `
+    const pin = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>';
+      const cash = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg>';
+      const tag = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 12 22l-9 1 1-9 8.59-8.59a2 2 0 0 1 2.83 0l5.17 5.17a2 2 0 0 1 0 2.83Z"/><circle cx="7.5" cy="7.5" r="1"/></svg>';
+
+      jobListDiv.innerHTML = jobs.map(job => {
+        const type = (job.job_type || job.type || '').toLowerCase();
+        const typeClass = ['full-time', 'part-time', 'internship', 'contract'].includes(type) ? type : 'default';
+        const title = escapeHTML(job.title || job.job_position);
+        const company = escapeHTML(job.company || job.company_name);
+        const location = escapeHTML(job.location || '');
+        const salary = job.salary || job.monthly_salary || '';
+        const skills = escapeHTML(job.skills || job.skills_required || '');
+
+        return `
       <div class="job-card">
-        <h4>${escapeHTML(job.title || job.job_position)}</h4>
-        <p><strong>Company:</strong> ${escapeHTML(job.company || job.company_name)}</p>
-        <p><strong>Location:</strong> ${escapeHTML(job.location)}</p>
-        <p><strong>Salary:</strong> $${job.salary || job.monthly_salary || "N/A"}</p>
-        <p><strong>Skills:</strong> ${escapeHTML(job.skills || job.skills_required || "N/A")}</p>
-        <p><strong>Type:</strong> ${escapeHTML(job.job_type || job.type || "N/A")}</p>
-        <div style="display: flex; gap: 10px; margin-top: 15px;">
-          <a href="../Apply.html?id=${job.id}" class="btn">Apply Now</a>
-          <a href="job-details.html?id=${job.id}" class="btn">View Details</a>
+        <div class="jc-top">
+          <div class="jc-avatar">${(company || 'H')[0].toUpperCase()}</div>
+          <div class="jc-id">
+            <div class="jc-title">${title}</div>
+            <div class="jc-company">${company}</div>
+          </div>
+          <span class="jb jb-${typeClass}">${escapeHTML(job.job_type || job.type || 'Job')}</span>
+        </div>
+        <div class="jc-meta">
+          ${location ? `<span class="jm">${pin}${location}</span>` : ''}
+          ${salary ? `<span class="jm">${cash}$${escapeHTML(salary)}</span>` : ''}
+          ${skills ? `<span class="jm jm-grow">${tag}${skills}</span>` : ''}
+        </div>
+        <div class="jc-foot">
+          <a href="../Apply.html?id=${job.id}" class="btn btn-go">Apply Now</a>
+          <a href="job-details.html?id=${job.id}" class="btn btn-ghost">View Details</a>
         </div>
       </div>
-    `).join("");
+    `;
+      }).join("");
 
-    // Update active filters display
-    updateActiveFilters(filters);
+      // Update active filters display
+      updateActiveFilters(filters);
 
   } catch (err) {
     jobListDiv.innerHTML = `<p style="color:red">${err.message}</p>`;
@@ -168,7 +189,7 @@ function saveFilters() {
   // Show confirmation
   const activeFiltersDiv = document.getElementById("activeFilters");
   if (activeFiltersDiv) {
-    activeFiltersDiv.innerHTML = '<span style="color: #52d8c7;">✓ Filters saved!</span>';
+    activeFiltersDiv.innerHTML = '<span style="color: #52d8c7;">âœ“ Filters saved!</span>';
     setTimeout(() => updateActiveFilters(filters), 2000);
   }
 }

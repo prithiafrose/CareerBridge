@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:5001/api";
+﻿const API_BASE = "/api";
 
 function getAuthHeaders() {
   const token = localStorage.getItem('token');
@@ -51,21 +51,22 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log('Dashboard data:', data);
       
       // Update welcome message
-      if (welcomeMessage && data.user?.full_name) {
-        welcomeMessage.textContent = `Welcome, ${data.user.full_name}!`;
+      const username = data.user?.username || user?.username || user?.full_name || 'Student';
+      if (welcomeMessage) {
+        welcomeMessage.textContent = `Hi, ${username}!`;
       }
       
       // Update cards
       if (totalJobsCard) {
-        totalJobsCard.textContent = `Total Jobs Available: ${data.totalJobs || 0}`;
+        totalJobsCard.textContent = (data.totalJobs || 0).toLocaleString();
       }
       
       if (appliedJobsCard) {
-        appliedJobsCard.textContent = `Applications Submitted: ${data.totalApplications || 0}`;
+        appliedJobsCard.textContent = (data.totalApplications || 0).toLocaleString();
       }
       
       if (profileCard) {
-        profileCard.textContent = `Profile Completion: ${data.profileCompletion || 0}%`;
+        profileCard.textContent = `${data.profileCompletion || 0}%`;
       }
       
     } catch (err) {
@@ -79,15 +80,20 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadFallbackData() {
     console.log('Loading fallback data...');
     
+    // Fallback greeting from stored profile
+    if (welcomeMessage) {
+      welcomeMessage.textContent = `Hi, ${user?.username || user?.full_name || 'Student'}!`;
+    }
+    
     // Load total jobs
     try {
       const res = await fetch(`${API_BASE}/jobs`);
       const data = await res.json();
       const jobs = data.jobs || data;
-      if (totalJobsCard) totalJobsCard.textContent = `Total Jobs Available: ${jobs.length}`;
+      if (totalJobsCard) totalJobsCard.textContent = jobs.length.toLocaleString();
     } catch (err) {
       console.error('Failed to fetch jobs:', err);
-      if (totalJobsCard) totalJobsCard.textContent = 'Failed to load jobs';
+      if (totalJobsCard) totalJobsCard.textContent = '0';
     }
 
     // Load applications
@@ -97,10 +103,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       const data = await res.json();
       const apps = Array.isArray(data) ? data : (data.applications || []);
-      if (appliedJobsCard) appliedJobsCard.textContent = `Applications Submitted: ${apps.length}`;
+      if (appliedJobsCard) appliedJobsCard.textContent = apps.length.toLocaleString();
     } catch (err) {
       console.error('Failed to fetch applications:', err);
-      if (appliedJobsCard) appliedJobsCard.textContent = 'Failed to load applications';
+      if (appliedJobsCard) appliedJobsCard.textContent = '0';
     }
 
     // Calculate profile completion
@@ -108,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const fields = ['full_name', 'email', 'mobile', 'skills', 'education', 'experience'];
       const filled = fields.filter(f => user[f] && user[f].toString().trim() !== '');
       const percent = Math.round((filled.length / fields.length) * 100);
-      if (profileCard) profileCard.textContent = `Profile Completion: ${percent}%`;
+      if (profileCard) profileCard.textContent = `${percent}%`;
     }
   }
 

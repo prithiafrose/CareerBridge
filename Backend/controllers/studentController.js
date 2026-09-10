@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const Job = require("../models/Job");
 const Application = require("../models/Application");
+const Notification = require("../models/Notification");
 
 const getStudentProfile = async (req, res) => {
   try {
@@ -9,7 +10,7 @@ const getStudentProfile = async (req, res) => {
     if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
     const user = await User.findByPk(userId, { 
-      attributes: ["id", "username", "email", "mobile", "role", "full_name", "skills", "education", "experience", "createdAt"] 
+      attributes: ["id", "username", "email", "mobile", "role", "full_name", "skills", "education", "experience", "profile_picture", "createdAt"] 
     });
     
     if (!user) return res.status(404).json({ error: "Student not found" });
@@ -25,7 +26,7 @@ const getStudentProfile = async (req, res) => {
 const updateStudentProfile = async (req, res) => {
   try {
     const userId = req.user?.id;
-    const { username, email, mobile, current_password, new_password, full_name, skills, education, experience } = req.body;
+    const { username, email, mobile, current_password, new_password, full_name, skills, education, experience, profile_picture } = req.body;
 
     const user = await User.findByPk(userId);
     if (!user) return res.status(404).json({ error: "Student not found" });
@@ -56,6 +57,7 @@ const updateStudentProfile = async (req, res) => {
     if (skills) user.skills = skills;
     if (education) user.education = education;
     if (experience !== undefined) user.experience = experience;
+    if (profile_picture) user.profile_picture = profile_picture;
 
     if (new_password) {
       const passwordHash = await bcrypt.hash(new_password, 10);
@@ -75,7 +77,8 @@ const updateStudentProfile = async (req, res) => {
         full_name: user.full_name,
         skills: user.skills,
         education: user.education,
-        experience: user.experience
+        experience: user.experience,
+        profile_picture: user.profile_picture
       } 
     });
   } catch (err) {
@@ -126,4 +129,56 @@ const getStudentDashboard = async (req, res) => {
   }
 };
 
-module.exports = { getStudentProfile, updateStudentProfile, getStudentDashboard };
+const getNotifications = async (req, res) => {
+  try {
+    const notifications = await Notification.findAll({
+      where: { user_id: req.user.id },
+      order: [['created_at', 'DESC']],
+      limit: 50
+    });
+    res.json(notifications);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+const getUnreadNotificationCount = async (req, res) => {
+  try {
+    const count = await Notification.count({
+      where: { user_id: req.user.id, read: false }
+    });
+    res.json({ count });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+const markNotificationRead = async (req, res) => {
+  try {
+    await Notification.update(
+      { read: true },
+      { where: { id: req.params.id, user_id: req.user.id } }
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+const markAllNotificationsRead = async (req, res) => {
+  try {
+    await Notification.update(
+      { read: true },
+      { where: { user_id: req.user.id } }
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+module.exports = { getStudentProfile, updateStudentProfile, getStudentDashboard, getNotifications, getUnreadNotificationCount, markNotificationRead, markAllNotificationsRead };

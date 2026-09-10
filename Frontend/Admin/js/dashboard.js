@@ -1,6 +1,15 @@
 document.addEventListener("DOMContentLoaded", async () => {
   checkAdminAuth();
 
+  // ====================== Personal Greeting ======================
+  const h1 = document.querySelector(".main-content h1");
+  if (h1) {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const name = user?.username || "Admin";
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    h1.innerHTML = `Hi, <span class="hi-name">${esc(name)}</span>!`;
+  }
+
   // ====================== Notifications ======================
   const notifBtn = document.getElementById("notifBtn");
   const notifDropdown = document.getElementById("notifDropdown");
@@ -90,6 +99,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         data.list.forEach(n => {
           const li = document.createElement("li");
           li.textContent = n.message;
+          li.addEventListener("click", () => {
+            if (n.actionUrl) window.location.href = n.actionUrl;
+          });
           notifList.appendChild(li);
         });
       }

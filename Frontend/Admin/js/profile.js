@@ -1,4 +1,4 @@
-// profile.js
+﻿// profile.js
 
 document.addEventListener("DOMContentLoaded", async () => {
   // --- AUTH CHECK ---
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   async function loadNotifications() {
     try {
-      const res = await fetch("/api/notifications", {
+      const res = await fetch("/api/admin/notifications", {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -46,16 +46,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const data = await res.json();
       notifList.innerHTML = "";
-      if (data.length === 0) {
+      if (!data.list || data.list.length === 0) {
         notifList.innerHTML = "<li>No notifications</li>";
       } else {
-        data.forEach(notif => {
+        data.list.forEach(notif => {
           const li = document.createElement("li");
           li.textContent = notif.message;
+          li.addEventListener("click", () => {
+            if (notif.actionUrl) window.location.href = notif.actionUrl;
+          });
           notifList.appendChild(li);
         });
       }
-      notifCount.textContent = data.length;
+      notifCount.textContent = data.count || 0;
     } catch (err) {
       console.error("Failed to load notifications:", err);
     }
@@ -71,7 +74,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log("Token value:", token.substring(0, 20) + "...");
       
       // Try with full URL first
-      const API_BASE = "http://localhost:5001";
+      const API_BASE = "";
       const res = await fetch(`${API_BASE}/api/auth/me`, {
         method: "GET",
         headers: {
@@ -167,7 +170,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       console.log("Updating profile with data:", updateData);
       
-      const API_BASE = "http://localhost:5001";
+      const API_BASE = "";
       const updateRes = await fetch(`${API_BASE}/api/auth/update-profile`, {
         method: "PUT",
         headers: {

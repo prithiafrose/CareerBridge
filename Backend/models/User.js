@@ -36,6 +36,10 @@ const User = sequelize.define("User", {
     type: DataTypes.BIGINT,
     allowNull: true,
   },
+  profile_picture: {
+    type: DataTypes.STRING(500),
+    allowNull: true,
+  },
   isActive: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,

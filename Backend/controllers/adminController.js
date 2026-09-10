@@ -3,6 +3,39 @@
 const User = require('../models/User');
 const Job = require('../models/Job');
 const Application = require('../models/Application');
+const Notification = require('../models/Notification');
+const { Op } = require('sequelize');
+
+// Get all applications across all jobs
+const getAllApplications = async (req, res) => {
+  try {
+    const applications = await Application.findAll({
+      include: [
+        { model: User, attributes: ['id', 'username', 'email', 'mobile'] },
+        { model: Job, attributes: ['id', 'title', 'company', 'location'] }
+      ],
+      order: [['id', 'DESC']]
+    });
+
+    const formatted = applications.map(app => ({
+      id: app.id,
+      name: app.User?.username || app.full_name || 'Unknown',
+      email: app.User?.email || app.email || 'Unknown',
+      job: app.Job?.title || 'Unknown',
+      company: app.Job?.company || '',
+      location: app.Job?.location || '',
+      resume_path: app.resume_path,
+      cover_letter: app.cover_letter,
+      status: app.status,
+      applied_at: app.createdAt
+    }));
+
+    res.json(formatted);
+  } catch (error) {
+    console.error('Error fetching applications:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
 
 // Get admin dashboard stats
 const getUsersStats = async (req, res) => {
@@ -76,12 +109,29 @@ const getUserStatusStats = async (req, res) => {
 const getNotifications = async (req, res) => {
   try {
     const pendingJobs = await Job.count({ where: { status: 'pending' } });
-    const count = pendingJobs;
+
+    const recentApplications = await Application.findAll({
+      include: [
+        { model: User, attributes: ['username'] },
+        { model: Job, attributes: ['title'] }
+      ],
+      where: { createdAt: { [Op.gte]: new Date(Date.now() - 24 * 60 * 60 * 1000) } },
+      order: [['id', 'DESC']],
+      limit: 10
+    });
+
+    const count = pendingJobs + recentApplications.length;
 
     const list = [];
     if (pendingJobs > 0) {
-      list.push({ message: `${pendingJobs} jobs pending approval` });
+      list.push({ message: `${pendingJobs} jobs pending approval`, actionUrl: 'jobs.html' });
     }
+    recentApplications.forEach(app => {
+      list.push({
+        message: `${app.User?.username || 'Someone'} applied to ${app.Job?.title || 'a job'}`,
+        actionUrl: 'applications.html'
+      });
+    });
 
     res.json({ count, list });
   } catch (error) {
@@ -247,7 +297,17 @@ const getApprovedJobs= async (req, res) => {
     }
     
     await job.update({ status: 'active' });
-    
+
+    // Notify the recruiter who posted the job
+    if (job.posted_by) {
+      await Notification.create({
+        user_id: job.posted_by,
+        title: 'Job Approved',
+        message: `Your job "${job.title}" has been approved and is now live.`,
+        type: 'job_alert'
+      });
+    }
+
     res.json({ message: "Job approved successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -368,5 +428,6 @@ module.exports = {
   getApprovedJobs,
   getDeletedJobs,
   getSingleJobsByID ,
-getSingleJobs
+getSingleJobs,
+  getAllApplications
 };
