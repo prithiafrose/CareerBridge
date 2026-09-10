@@ -25,7 +25,7 @@ async function loadApplicants() {
     const response = await fetch(API + "/recruiter/applicants", authFetchOptions());
     if (response.status === 401) {
       localStorage.removeItem('token');
-      window.location.href = '../Auth/login.html';
+      window.location.href = '../Auth/Login.html';
       return;
     }
     if (!response.ok) throw new Error('Failed to fetch applicants');
@@ -158,7 +158,7 @@ async function updateStatus(applicantId, newStatus) {
 
     if (response.status === 401) {
       localStorage.removeItem('token');
-      window.location.href = '../Auth/login.html';
+      window.location.href = '../Auth/Login.html';
       return;
     }
     if (!response.ok) throw new Error('Failed to update status');
@@ -198,13 +198,13 @@ window.logout = function() {
       // Remove token from localStorage
       localStorage.removeItem('token');
       // Redirect to login page
-      window.location.href = '../Auth/login.html';
+      window.location.href = '../Auth/Login.html';
     })
     .catch(err => {
       console.error('Error during logout:', err);
       // Even if API call fails, remove token and redirect
       localStorage.removeItem('token');
-      window.location.href = '../Auth/login.html';
+      window.location.href = '../Auth/Login.html';
     });
   }
 };
@@ -213,7 +213,7 @@ window.logout = function() {
 function checkAuth() {
   const token = getAuthToken();
   if (!token) {
-    window.location.href = '../Auth/login.html';
+    window.location.href = '../Auth/Login.html';
     return;
   }
 
@@ -229,13 +229,13 @@ function checkAuth() {
       if (data.user.role !== 'recruiter') {
         alert('Access denied. Recruiter role required.');
         localStorage.removeItem('token');
-        window.location.href = '../Auth/login.html';
+        window.location.href = '../Auth/Login.html';
       }
     })
     .catch(err => {
       console.error('Auth check failed:', err);
       localStorage.removeItem('token');
-      window.location.href = '../Auth/login.html';
+      window.location.href = '../Auth/Login.html';
     });
 }
 

@@ -57,12 +57,12 @@ window.logout = function() {
     })
     .then(() => {
       localStorage.removeItem('token');
-      window.location.href = '../Auth/login.html';
+      window.location.href = '../Auth/Login.html';
     })
     .catch(err => {
       console.error('Error during logout:', err);
       localStorage.removeItem('token');
-      window.location.href = '../Auth/login.html';
+      window.location.href = '../Auth/Login.html';
     });
   }
 };
@@ -71,7 +71,7 @@ window.logout = function() {
 function checkAuth() {
   const token = getAuthToken();
   if (!token) {
-    window.location.href = '../Auth/login.html';
+    window.location.href = '../Auth/Login.html';
     return;
   }
 
@@ -86,13 +86,13 @@ function checkAuth() {
       if (data.user.role !== 'recruiter') {
         alert('Access denied. Recruiter role required.');
         localStorage.removeItem('token');
-        window.location.href = '../Auth/login.html';
+        window.location.href = '../Auth/Login.html';
       }
     })
     .catch(err => {
       console.error('Auth check failed:', err);
       localStorage.removeItem('token');
-      window.location.href = '../Auth/login.html';
+      window.location.href = '../Auth/Login.html';
     });
 }
 
