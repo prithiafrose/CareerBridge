@@ -22,6 +22,10 @@ exports.applyJob = async (req, res) => {
 };
 
 exports.listApplications = async (req, res) => {
-  const applications = await db.Application.findAll({ where: { user_id: req.user.id } });
-  res.json(applications);
+  try {
+    const applications = await db.Application.findAll({ where: { user_id: req.user.id } });
+    res.json(applications);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };

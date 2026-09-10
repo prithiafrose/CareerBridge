@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const redirectUrl = urlParams.get("redirect");
       if (redirectUrl) {
         e.preventDefault();
-        window.location.href = `register.html?redirect=${encodeURIComponent(redirectUrl)}`;
+        window.location.href = `Register.html?redirect=${encodeURIComponent(redirectUrl)}`;
       }
     });
   }
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const redirectUrl = urlParams.get("redirect");
       if (redirectUrl) {
         e.preventDefault();
-        window.location.href = `login.html?redirect=${encodeURIComponent(redirectUrl)}`;
+        window.location.href = `Login.html?redirect=${encodeURIComponent(redirectUrl)}`;
       }
     });
   }
@@ -89,7 +89,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const redirectUrl = urlParams.get("redirect");
 
         if (redirectUrl) {
-             setTimeout(() => window.location.href = decodeURIComponent(redirectUrl), 800);
+             const decoded = decodeURIComponent(redirectUrl);
+             if (decoded.startsWith('/') && !decoded.startsWith('//')) {
+               setTimeout(() => window.location.href = decoded, 800);
+             } else {
+               setTimeout(() => window.location.href = "../Student/dashboard.html", 800);
+             }
              return;
         }
 
@@ -222,7 +227,12 @@ const formData = {
         const redirectUrl = urlParams.get("redirect");
 
         if (redirectUrl) {
-             setTimeout(() => window.location.href = decodeURIComponent(redirectUrl), 900);
+             const decoded = decodeURIComponent(redirectUrl);
+             if (decoded.startsWith('/') && !decoded.startsWith('//')) {
+               setTimeout(() => window.location.href = decoded, 900);
+             } else {
+               setTimeout(() => window.location.href = "../Student/dashboard.html", 900);
+             }
              return;
         }
 

@@ -37,16 +37,16 @@ if (document.getElementById("jobList")) {
 
       jobList.innerHTML = data.map(job => `
         <div class="card">
-          <h3>${job.title}</h3>
-          <p><strong>Company:</strong> ${job.company}</p>
-          <p><strong>Location:</strong> ${job.location || 'Not specified'}</p>
-          <p><strong>Salary:</strong> ${job.salary ? '$' + job.salary : 'Not specified'}</p>
-          <p><strong>Type:</strong> ${job.type || 'Not specified'}</p>
-          <p><strong>Description:</strong> ${job.description || 'No description'}</p>
+          <h3>${escapeHTML(job.title)}</h3>
+          <p><strong>Company:</strong> ${escapeHTML(job.company)}</p>
+          <p><strong>Location:</strong> ${escapeHTML(job.location) || 'Not specified'}</p>
+          <p><strong>Salary:</strong> ${job.salary ? '$' + escapeHTML(job.salary) : 'Not specified'}</p>
+          <p><strong>Type:</strong> ${escapeHTML(job.type) || 'Not specified'}</p>
+          <p><strong>Description:</strong> ${escapeHTML(job.description) || 'No description'}</p>
           <div class="job-actions">
-            <button class="btn btn-edit" onclick="editJob(${job.id})">Edit</button>
-            <button class="btn btn-delete" onclick="deleteJob(${job.id})">Delete</button>
-            <button class="btn btn-view" onclick="viewApplicants(${job.id})">View Applicants</button>
+            <button class="btn btn-edit" onclick="editJob(${parseInt(job.id)})">Edit</button>
+            <button class="btn btn-delete" onclick="deleteJob(${parseInt(job.id)})">Delete</button>
+            <button class="btn btn-view" onclick="viewApplicants(${parseInt(job.id)})">View Applicants</button>
           </div>
         </div>
       `).join("");

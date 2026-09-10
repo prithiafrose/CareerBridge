@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const jwtSecret = process.env.JWT_SECRET || "change_this";
+const jwtSecret = process.env.JWT_SECRET;
 
 const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;

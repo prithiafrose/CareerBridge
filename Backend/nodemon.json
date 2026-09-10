@@ -1,9 +1,9 @@
 {
   "watch": [
-    "Routes",
-    "Models",
-    "Controllers",
-    "Server.js"
+    "routes",
+    "models",
+    "controllers",
+    "server.js"
   ],
   "ignore": [
     "../Frontend/*",

@@ -53,7 +53,7 @@ const getRecentUsersStats = async (req, res) => {
 const getRecentJobs = async (req, res) => {
   try {
     const recentJobs = await Job.findAll({
-      order: [['created_at', 'DESC']],
+      order: [['createdAt', 'DESC']],
       limit: 5,
       attributes: ['id', 'title', 'company']
     });

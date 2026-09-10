@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.getElementById("logout").addEventListener("click", () => {
     localStorage.removeItem("token");
-    window.location.href = "/Frontend/Auth/Login.html";
+    window.location.href = "../Auth/Login.html";
   });
 });
 

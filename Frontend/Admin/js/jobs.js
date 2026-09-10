@@ -87,14 +87,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       jobs.forEach(job => {
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td>${job.id}</td>
-          <td>${job.title}</td>
-          <td>${job.company}</td>
-          <td><span class="status-${job.status}">${job.status}</span></td>
+          <td>${parseInt(job.id)}</td>
+          <td>${escapeHTML(job.title)}</td>
+          <td>${escapeHTML(job.company)}</td>
+          <td><span class="status-${escapeHTML(job.status)}">${escapeHTML(job.status)}</span></td>
           <td>
-            ${job.status === "pending" ? `<button class="btn approve-btn" data-id="${job.id}">Approve</button>` : ''}
-            <button class="btn edit-btn" data-id="${job.id}">Edit</button>
-            <button class="btn delete-btn" data-id="${job.id}" style="background-color:#ff4d4d">Delete</button>
+            ${job.status === "pending" ? `<button class="btn approve-btn" data-id="${parseInt(job.id)}">Approve</button>` : ''}
+            <button class="btn edit-btn" data-id="${parseInt(job.id)}">Edit</button>
+            <button class="btn delete-btn" data-id="${parseInt(job.id)}" style="background-color:#ff4d4d">Delete</button>
           </td>
         `;
         tableBody.appendChild(row);

@@ -63,10 +63,10 @@ if (document.getElementById("applicantsTable")) {
 
       tableBody.innerHTML = data.map(app => `
         <tr>
-          <td>${app.name}</td>
-          <td>${app.job}</td>
-          <td>${app.email}</td>
-          <td><span class="status ${app.status}">${app.status}</span></td>
+          <td>${escapeHTML(app.name)}</td>
+          <td>${escapeHTML(app.job)}</td>
+          <td>${escapeHTML(app.email)}</td>
+          <td><span class="status ${escapeHTML(app.status)}">${escapeHTML(app.status)}</span></td>
         </tr>
       `).join("");
     })
@@ -92,15 +92,15 @@ if (document.getElementById("jobList")) {
 
       jobList.innerHTML = data.map(job => `
         <div class="card">
-          <h3>${job.title}</h3>
-          <p><strong>Company:</strong> ${job.company}</p>
-          <p><strong>Location:</strong> ${job.location}</p>
-          <p><strong>Salary:</strong> $${job.salary}</p>
-          <p><strong>Type:</strong> ${job.type}</p>
+          <h3>${escapeHTML(job.title)}</h3>
+          <p><strong>Company:</strong> ${escapeHTML(job.company)}</p>
+          <p><strong>Location:</strong> ${escapeHTML(job.location)}</p>
+          <p><strong>Salary:</strong> $${escapeHTML(job.salary)}</p>
+          <p><strong>Type:</strong> ${escapeHTML(job.type)}</p>
           <div class="job-actions">
-            <button class="btn btn-edit" onclick="editJob(${job.id})">Edit</button>
-            <button class="btn btn-delete" onclick="deleteJob(${job.id})">Delete</button>
-            <button class="btn btn-view" onclick="viewApplicants(${job.id})">View Applicants</button>
+            <button class="btn btn-edit" onclick="editJob(${parseInt(job.id)})">Edit</button>
+            <button class="btn btn-delete" onclick="deleteJob(${parseInt(job.id)})">Delete</button>
+            <button class="btn btn-view" onclick="viewApplicants(${parseInt(job.id)})">View Applicants</button>
           </div>
         </div>
       `).join("");

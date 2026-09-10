@@ -11,12 +11,20 @@ exports.createJob = async (req, res) => {
 };
 
 exports.listJobs = async (req, res) => {
-  const jobs = await db.Job.findAll();
-  res.json(jobs);
+  try {
+    const jobs = await db.Job.findAll();
+    res.json(jobs);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 exports.getJob = async (req, res) => {
-  const job = await db.Job.findByPk(req.params.id);
-  if (!job) return res.status(404).json({ error: 'Job not found' });
-  res.json(job);
+  try {
+    const job = await db.Job.findByPk(req.params.id);
+    if (!job) return res.status(404).json({ error: 'Job not found' });
+    res.json(job);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };

@@ -13,8 +13,7 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
-  }// Backend/controllers/authController.js
-,
+  },
 });
 
 // Helper function to validate email
@@ -22,7 +21,7 @@ async function isEmailValid(email) {
   return emailValidator.validate(email);
 }
 
-const jwtSecret = process.env.JWT_SECRET || "change_this";
+const jwtSecret = process.env.JWT_SECRET;
 const tokenExpiry = process.env.TOKEN_EXPIRY || "7d";
 
 const register = async (req, res) => {
@@ -50,7 +49,10 @@ const register = async (req, res) => {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
-    const user = await User.create({ username, email, mobile, role: role || "student", password: passwordHash });
+    const allowedRoles = ["student", "recruiter"];
+    const userRole = allowedRoles.includes(role) ? role : "student";
+
+    const user = await User.create({ username, email, mobile, role: userRole, password: passwordHash });
 
     const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, jwtSecret, { expiresIn: tokenExpiry });
 

@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const jobListEl = document.getElementById('job-list');
   const searchForm = document.querySelector('form');
+  if (!searchForm) return;
   const jobTitleInput = searchForm.querySelector('input[placeholder="Job title or keyword"]');
   const locationInput = searchForm.querySelector('input[placeholder="Location"]');
   const typeButtons = document.querySelectorAll('.category-btn'); 
@@ -40,12 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
       ? "<p class='text-center text-gray-600 col-span-full'>No jobs found</p>"
       : filteredJobs.map(job => `
           <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-            <h3 class="text-xl font-semibold text-gray-800 mb-2">${job.title}</h3>
-            <p class="text-gray-600 mb-1"><strong>Company:</strong> ${job.company}</p>
-            <p class="text-gray-600 mb-1"><strong>Salary:</strong> ${job.salary || 'N/A'}</p>
-            <p class="text-gray-600 mb-1"><strong>Location:</strong> ${job.location || 'N/A'}</p>
-            <p class="text-gray-600 mb-4"><strong>Type:</strong> ${job.type || 'N/A'}</p>
-            <button onclick="applyJob(${job.id})" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition-colors">
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">${escapeHTML(job.title)}</h3>
+            <p class="text-gray-600 mb-1"><strong>Company:</strong> ${escapeHTML(job.company)}</p>
+            <p class="text-gray-600 mb-1"><strong>Salary:</strong> ${escapeHTML(job.salary) || 'N/A'}</p>
+            <p class="text-gray-600 mb-1"><strong>Location:</strong> ${escapeHTML(job.location) || 'N/A'}</p>
+            <p class="text-gray-600 mb-4"><strong>Type:</strong> ${escapeHTML(job.type) || 'N/A'}</p>
+            <button onclick="applyJob(${parseInt(job.id)})" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition-colors">
   Apply Now
 </button>
 

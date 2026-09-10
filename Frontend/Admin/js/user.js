@@ -59,14 +59,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       users.forEach(user => {
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td>${user.id}</td>
-          <td>${user.username}</td>
-          <td>${user.email}</td>
-          <td>${user.mobile || "N/A"}</td>
-          <td>${user.role}</td>
+          <td>${parseInt(user.id)}</td>
+          <td>${escapeHTML(user.username)}</td>
+          <td>${escapeHTML(user.email)}</td>
+          <td>${escapeHTML(user.mobile) || "N/A"}</td>
+          <td>${escapeHTML(user.role)}</td>
           <td>
-            <button class="btn edit-btn" data-id="${user.id}" data-username="${user.username}" data-email="${user.email}" data-mobile="${user.mobile || ''}" data-role="${user.role}">Edit</button>
-            <button class="btn delete-btn" data-id="${user.id}" style="background-color:#ff4d4d">Delete</button>
+            <button class="btn edit-btn" data-id="${parseInt(user.id)}" data-username="${escapeHTML(user.username)}" data-email="${escapeHTML(user.email)}" data-mobile="${escapeHTML(user.mobile || '')}" data-role="${escapeHTML(user.role)}">Edit</button>
+            <button class="btn delete-btn" data-id="${parseInt(user.id)}" style="background-color:#ff4d4d">Delete</button>
           </td>
         `;
         tableBody.appendChild(row);
@@ -129,15 +129,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         <span class="close">&times;</span>
         <h2>Edit User</h2>
         <form id="edit-user-form">
-          <input type="hidden" id="edit-user-id" value="${id}">
+          <input type="hidden" id="edit-user-id" value="${parseInt(id)}">
           <label>Username:</label>
-          <input type="text" id="edit-username" value="${username}" required>
+          <input type="text" id="edit-username" value="${escapeHTML(username)}" required>
           
           <label>Email:</label>
-          <input type="email" id="edit-email" value="${email}" required>
+          <input type="email" id="edit-email" value="${escapeHTML(email)}" required>
           
           <label>Mobile:</label>
-          <input type="text" id="edit-mobile" value="${mobile}">
+          <input type="text" id="edit-mobile" value="${escapeHTML(mobile)}">
           
           <label>Role:</label>
           <select id="edit-role">

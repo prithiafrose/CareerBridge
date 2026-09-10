@@ -24,7 +24,13 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-  origin: true,
+  origin: function (origin, callback) {
+    if (!origin || origin.startsWith('http://localhost')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 

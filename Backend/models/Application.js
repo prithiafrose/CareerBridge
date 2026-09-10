@@ -51,7 +51,7 @@ Application.getApplicationsForJob = async function(jobId) {
         attributes: ['title', 'company']
       }
     ],
-    order: [['created_at', 'DESC']]
+    order: [['createdAt', 'DESC']]
   });
 };
 

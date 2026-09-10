@@ -9,5 +9,5 @@ module.exports = {
     database: process.env.DB_NAME,
     dialect: 'mysql'
   },
-  jwtSecret: process.env.JWT_SECRET || 'supersecret'
+  jwtSecret: process.env.JWT_SECRET
 };
